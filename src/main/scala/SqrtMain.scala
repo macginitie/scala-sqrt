@@ -1,31 +1,40 @@
 object SqrtMain {
 
+  val max_level = 5
+  var answers = Array(1.0,0,0,0,0)
+
   def main(args: Array[String]): Unit = {
     val s = args(0)
-    if (check_arg(s)) {
-      val num = dbl(s)
-      val root = Newton(4.0)
-      println(s"the square root of "+args(0)+s" is approximately ${root}")
+    val num = dbl(s)
+    if (num == 0) {
+      println("the square root of 0 is 0")
+    }
+    else if (num > 0) {
+      val root = Newton(num, answers, max_level, 1)
+      println(s"the square root of ${num} is approximately ${root}")
     }
     else {
-      // 2DO: complain politely
-      println("sorry, dunno how to find the square root of "+args(0))
+      // complain politely
+      println("sorry, I don't how to find the square root of "+args(0))
       println("please restrict input to digits, with at most one decimal point")
+      println("(this program doesn't handle complex numbers, but valid scientific notation is accepted)")
     }
   }
 
-  def check_arg(s: String): Boolean = {
-    // 2DO
-    true
-  }
-
+  // parse s to extract Double;
+  // return -1.0 to indicate failure
   def dbl(s: String): Double = {
-    // 2DO
-    4.0
+    s.toDoubleOption.getOrElse(-1d)
   }
 
-  def Newton(num: Double): Double = {
-    // 2DO
-    2.0
+  def Newton(in_num: Double, answers: Array[Double], max_level:Int, level:Int): Double = {
+    if (level == max_level) {
+      answers(max_level-1)
+    }
+    else {
+      // 2DO
+      // calculate answer(level) using answer(level-1)
+      Newton(in_num, answers, max_level, level + 1)
+    }
   }
 }
