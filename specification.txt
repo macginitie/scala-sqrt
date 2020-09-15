@@ -1,33 +1,29 @@
+
 Scala program which satisfies the following traits:
 
- 
+1.  Using a mathematical method of your choice, implement the square root function by employing as many functional programming principles as possible in Scala.
 
-1.      Using a mathematical method of your choice, implement the square root function by employing as many functional programming principles as possible in Scala.
+2.  Once the program is complete, provide accompanying documentation with relevant detail which provides instructions on how to compile and execute the program for a layperson.
 
-2.      Once the program is complete, provide accompanying documentation with relevant detail which provides instructions on how to compile and execute the program for a layperson.
+    a.  Assume the layperson is capable of all basic tasks related to using a computer such as basic navigation, running programs, troubleshooting basic issues etc.
 
-a.       Assume the layperson is capable of all basic tasks related to using a computer such as basic navigation, running programs, troubleshooting basic issues etc.
+    b.  Assume that the machine has the following attributes:
 
-b.      Assume that the machine has the following attributes:
+        i.    Windows 10
 
-                                                               i.      Windows 10
+        ii.   IntelliJ IDEA installed
 
-                                                             ii.      IntelliJ IDEA installed
-
-                                                            iii.      Scala installed
-
+        iii.  Scala installed
  
 
 Feel free to submit the problem in any way you feel is appropriate i.e. inclusion of unit tests, packaged as a JAR file, committed to your personal Git repo etc.
-
- 
 
 As a high-level rubric, I will assess your program for its completeness, execution, style, and adherence to good coding practices.
 
 addendum:
 
-1.      No preference on the input method although it is sufficient if you can design the function for a single input.
+1.  No preference on the input method although it is sufficient if you can design the function for a single input.
 
-2.      For the sake of simplicity, the function should be able to handle only reals.
+2.  For the sake of simplicity, the function should be able to handle only reals.
 
  
