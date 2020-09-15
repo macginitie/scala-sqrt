@@ -5,24 +5,31 @@ object SqrtMain {
   // program entry point which accepts
   // arguments provided on the command line
   def main(args: Array[String]): Unit = {
-    val numStr = args(0)
-    val number = dbl(numStr)
+    var number = -1.0
+    var numStr = "(unspecified number)"
+    try {
+      numStr = args(0)
+      number = dbl(numStr)
+    }
+    catch  {
+      case _: Throwable => println("missing command line argument")
+    }
     if (number == 0) {
       println("the square root of 0 is 0")
     }
     else if (number > 0) {
-      val max_level = 12
-      val estimate = Array(1.0)
+      val max_level = 15 // may be overkill, but speed doesn't seem to be a problem
+      val estimate = Array(initial_estimate(number))
 
       // separate the output from the input with a blank line
       println()
-
       var root = square_root(number, estimate, max_level, 1, Newton)
       println(s"Using Newton's method, the square root of ${number} is ${adverb(number, root)} ${root}")
 
       // another blank line to improve readability
       println()
-
+      // reset the initial estimate
+      estimate(0) = initial_estimate(number)
       root = square_root(number, estimate, max_level, 1, Babylonian)
       println(s"Using the Babylonian method, the square root of ${number} is ${adverb(number, root)} ${root}")
     }
@@ -49,6 +56,16 @@ object SqrtMain {
     if (est * est == num) { "" } else { "approximately" }
   }
 
+  // help the methods converge for larger numbers
+  def initial_estimate(number: Double): Double = {
+    if (number > 1000) {
+      number/10.0
+    }
+    else {
+      1.0
+    }
+  }
+
   // recursive function to approximate square root using an iterative method
   // in_num: the number for which the square root is sought
   // estimate: a 1-element array that stores the current estimate
@@ -61,8 +78,6 @@ object SqrtMain {
                   level:Int,
                   estimate_reviser: (Double, Double) => Double
                  ): Double = {
-    // useful for debugging, to determine a reasonable value for max_level:
-    // println(s"${level} ==> ${estimate(0)}")
 
     if (level == max_level) // recursion end condition
       estimate(0)
