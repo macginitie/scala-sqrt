@@ -5,23 +5,32 @@ object SqrtMain {
   // program entry point which accepts
   // arguments provided on the command line
   def main(args: Array[String]): Unit = {
-    val s = args(0)
-    val num = dbl(s)
-    if (num == 0) {
+    val numStr = args(0)
+    val number = dbl(numStr)
+    if (number == 0) {
       println("the square root of 0 is 0")
     }
-    else if (num > 0) {
+    else if (number > 0) {
       val max_level = 12
-      var estimate = Array(1.0)
+      val estimate = Array(1.0)
 
-      val root = square_root(num, estimate, max_level, 1, Newton)
-      println(s"the square root of ${num} is approximately ${root}")
+      // separate the output from the input with a blank line
+      println()
+
+      var root = square_root(number, estimate, max_level, 1, Newton)
+      println(s"Using Newton's method, the square root of ${number} is ${adverb(number, root)} ${root}")
+
+      // another blank line to improve readability
+      println()
+
+      root = square_root(number, estimate, max_level, 1, Babylonian)
+      println(s"Using the Babylonian method, the square root of ${number} is ${adverb(number, root)} ${root}")
     }
     else {
       // the program doesn't handle valid negative numbers, or anything that fails
       // to parse to a double, which is flagged as -1 in the dbl() function
-      println("sorry, I don't how to find the square root of " + s)
-      println("please restrict input to digits, with at most one decimal point")
+      println("sorry, I don't how to find the square root of " + numStr)
+      println("please supply a non-negative real number as the program argument")
       println("(this program doesn't handle negative numbers,")
       println("but valid scientific notation is accepted)")
     }
@@ -35,6 +44,11 @@ object SqrtMain {
     s.toDoubleOption.getOrElse(-1d)
   }
 
+  // helper function to pass to Scala's string interpolation
+  def adverb (num: Double, est: Double): String = {
+    if (est * est == num) { "" } else { "approximately" }
+  }
+
   // recursive function to approximate square root using an iterative method
   // in_num: the number for which the square root is sought
   // estimate: a 1-element array that stores the current estimate
@@ -42,25 +56,33 @@ object SqrtMain {
   // level: current level of recursion
   // estimate_reviser: function that produces estimate x[n] from x[n-1] and the input number
   def square_root(in_num: Double,
-                  estimates: Array[Double],
+                  estimate: Array[Double],
                   max_level:Int,
                   level:Int,
                   estimate_reviser: (Double, Double) => Double
                  ): Double = {
-    // useful for debugging:
-    // println(s"${level} ==> ${estimate(0)}, ${estimate(1)}")
-    if (level == max_level)
-      estimates(0)
+    // useful for debugging, to determine a reasonable value for max_level:
+    // println(s"${level} ==> ${estimate(0)}")
+
+    if (level == max_level) // recursion end condition
+      estimate(0)
     else {
-      // calculate new estimate using previous estimate
-      var prev_est = estimates(0)
-      estimates(0) = estimate_reviser(in_num, prev_est)
-      square_root(in_num, estimates, max_level, level + 1, estimate_reviser)
+      // calculate new estimate using current estimate
+      estimate(0) = estimate_reviser(in_num, estimate(0))
+      // call recursively
+      square_root(in_num, estimate, max_level, level + 1, estimate_reviser)
     }
   }
 
   // single iteration of Newton's Method
+  // https://en.wikipedia.org/wiki/Newton%27s_method#Square_root
   def Newton(in_num: Double, prev_est: Double): Double = {
     prev_est - ((pow(prev_est,2) - in_num)/(2 * prev_est))
+  }
+
+  // single iteration of the Babylonian method
+  // https://en.wikipedia.org/wiki/Methods_of_computing_square_roots#Babylonian_method
+  def Babylonian(in_num: Double, prev_est: Double): Double = {
+    0.5 * (prev_est + in_num/prev_est)
   }
 }
